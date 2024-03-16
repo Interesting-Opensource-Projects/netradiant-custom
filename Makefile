@@ -76,6 +76,17 @@ LIBS_QTGUI         ?= $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt
 CPPFLAGS_QTWIDGETS ?= $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Widgets --cflags $(STDERR_TO_DEVNULL))
 LIBS_QTWIDGETS     ?= $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Widgets --libs-only-L $(STDERR_TO_DEVNULL)) \
                       $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Widgets --libs-only-l $(STDERR_TO_DEVNULL))
+					  
+CPPFLAGS_QTQUICK   ?= $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Quick --cflags $(STDERR_TO_DEVNULL)) \
+					  $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Quick3D --cflags $(STDERR_TO_DEVNULL)) \
+					  $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5QML --cflags $(STDERR_TO_DEVNULL))
+
+LIBS_QTQUICK       ?= $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Quick --libs-only-L $(STDERR_TO_DEVNULL)) \
+                      $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Quick --libs-only-l $(STDERR_TO_DEVNULL)) \
+					  $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Quick3D --libs-only-L $(STDERR_TO_DEVNULL)) \
+                      $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5Quick3D --libs-only-l $(STDERR_TO_DEVNULL)) \
+					  $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5QML --libs-only-L $(STDERR_TO_DEVNULL)) \
+                      $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKGCONFIG) Qt5QML --libs-only-l $(STDERR_TO_DEVNULL))
 CPPFLAGS_GL        ?=
 LIBS_GL            ?= -lGL # -lopengl32 on Win32
 CPPFLAGS_DL        ?=
@@ -584,6 +595,76 @@ $(INSTALLDIR)/q3map2.$(EXE): \
 	$(if $(findstring Win32,$(OS)),icons/q3map2.o,) \
 	| $(INSTALLDIR)/libassimp_.$(DLL) \
 
+libdock.$(A): CPPFLAGS_EXTRA := $(CPPFLAGS_QTQUICK) $(CPPFLAGS_QTCORE) $(CPPFLAGS_QTGUI) $(CPPFLAGS_QTWIDGETS) -Ilibs -Iinclude -Iradiant/dock -Iradiant/dock/fwd_headers -IC:/msys64/mingw64/include/QtWidgets/5.15.12 -IC:/msys64/mingw64/include/QtWidgets/5.15.12/QtWidgets -IC:/msys64/mingw64/include/QtGui/5.15.12 -IC:/msys64/mingw64/include/QtGui/5.15.12/QtGui -IC:/msys64/mingw64/include/QtCore/5.15.12 -IC:/msys64/mingw64/include/QtCore/5.15.12/QtCore -DQT_VERSION_MAJOR=5 -DQT_MIN_VERSION="\"5.15\"" -DKDDOCKWIDGETS_STATICLIB
+libdock.$(A): \
+	radiant/dock/private/widgets/QWidgetAdapter_widgets.o \
+	radiant/dock/private/widgets/FloatingWindowWidget.o \
+	radiant/dock/private/widgets/FrameWidget.o \
+	radiant/dock/private/widgets/DockWidget.o \
+	radiant/dock/private/quick/TitleBarQuick.o \
+	radiant/dock/private/quick/TabWidgetQuick.o \
+	radiant/dock/private/quick/TabBarQuick.o \
+	radiant/dock/private/quick/QmlTypes.o \
+	radiant/dock/private/quick/RubberBandQuick.o \
+	radiant/dock/private/quick/QWidgetAdapter_quick.o \
+	radiant/dock/private/quick/MainWindowInstantiator.o \
+	radiant/dock/private/quick/MainWindowQuick.o \
+	radiant/dock/private/quick/LayoutSaverInstantiator.o \
+	radiant/dock/private/quick/FrameQuick.o \
+	radiant/dock/private/quick/Helpers.o \
+	radiant/dock/private/quick/FloatingWindowQuick.o \
+	radiant/dock/private/quick/DockWidgetInstantiator.o \
+	radiant/dock/private/multisplitter/Widget_qwidget.o \
+	radiant/dock/private/multisplitter/Widget.o \
+	radiant/dock/private/multisplitter/Widget_quick.o \
+	radiant/dock/private/multisplitter/Separator_qwidget.o \
+	radiant/dock/private/multisplitter/Separator.o \
+	radiant/dock/private/multisplitter/Separator_quick.o \
+	radiant/dock/private/multisplitter/Rubberband_quick.o \
+	radiant/dock/private/multisplitter/MultiSplitterConfig.o \
+	radiant/dock/private/multisplitter/Logging.o \
+	radiant/dock/private/multisplitter/ItemFreeContainer.o \
+	radiant/dock/private/multisplitter/Item.o \
+	radiant/dock/private/indicators/NullIndicators.o \
+	radiant/dock/private/indicators/SegmentedIndicators.o \
+	radiant/dock/private/indicators/ClassicIndicatorsWindow.o \
+	radiant/dock/private/indicators/ClassicIndicators.o \
+	radiant/dock/private/WindowBeingDragged.o \
+	radiant/dock/private/WidgetResizeHandler.o \
+	radiant/dock/private/TitleBar.o \
+	radiant/dock/private/SideBar.o \
+	radiant/dock/private/TabWidget.o \
+	radiant/dock/private/Position.o \
+	radiant/dock/private/MultiSplitter.o \
+	radiant/dock/private/ObjectViewer.o \
+	radiant/dock/private/MDILayoutWidget.o \
+	radiant/dock/private/LayoutWidget.o \
+	radiant/dock/private/Logging.o \
+	radiant/dock/private/Frame.o \
+	radiant/dock/private/FloatingWindow.o \
+	radiant/dock/private/DropIndicatorOverlayInterface.o \
+	radiant/dock/private/DropAreaWithCentralFrame.o \
+	radiant/dock/private/Draggable.o \
+	radiant/dock/private/DropArea.o \
+	radiant/dock/private/DragController.o \
+	radiant/dock/private/DockRegistry.o \
+	radiant/dock/private/DebugWindow.o \
+	radiant/dock/layoutlinter_main.o \
+	radiant/dock/MainWindowMDI.o \
+	radiant/dock/MainWindowBase.o \
+	radiant/dock/MainWindow.o \
+	radiant/dock/MDIArea.o \
+	radiant/dock/LayoutSaver.o \
+	radiant/dock/FrameworkWidgetFactory.o \
+	radiant/dock/FocusScope.o \
+	radiant/dock/DockWidgetBase.o \
+	radiant/dock/DockWidgetQuick.o \
+	radiant/dock/Config.o \
+	radiant/dock/private/widgets/TitleBarWidget.o \
+	radiant/dock/private/widgets/TabWidgetWidget.o \
+	radiant/dock/private/widgets/SideBarWidget.o \
+	radiant/dock/private/widgets/TabBarWidget.o \
+
 libmathlib.$(A): CPPFLAGS_EXTRA := -Ilibs
 libmathlib.$(A): \
 	libs/mathlib/bbox.o \
@@ -829,8 +910,8 @@ libetclib.$(A): \
 	libs/etclib.o \
 
 $(INSTALLDIR)/radiant.$(EXE): LDFLAGS_EXTRA := $(MWINDOWS)
-$(INSTALLDIR)/radiant.$(EXE): LIBS_EXTRA := $(LIBS_GL) $(LIBS_DL) $(LIBS_XML) $(LIBS_GLIB) $(LIBS_QTCORE) $(LIBS_QTGUI) $(LIBS_QTWIDGETS) $(LIBS_ZLIB)
-$(INSTALLDIR)/radiant.$(EXE): CPPFLAGS_EXTRA := $(CPPFLAGS_GL) $(CPPFLAGS_DL) $(CPPFLAGS_XML) $(CPPFLAGS_GLIB) $(CPPFLAGS_QTCORE) $(CPPFLAGS_QTGUI) $(CPPFLAGS_QTWIDGETS) -Ilibs -Iinclude
+$(INSTALLDIR)/radiant.$(EXE): LIBS_EXTRA := $(LIBS_QTQUICK) $(LIBS_GL) $(LIBS_DL) $(LIBS_XML) $(LIBS_GLIB) $(LIBS_QTCORE) $(LIBS_QTGUI) $(LIBS_QTWIDGETS) $(LIBS_ZLIB)
+$(INSTALLDIR)/radiant.$(EXE): CPPFLAGS_EXTRA := $(CPPFLAGS_QTQUICK) $(CPPFLAGS_GL) $(CPPFLAGS_DL) $(CPPFLAGS_XML) $(CPPFLAGS_GLIB) $(CPPFLAGS_QTCORE) $(CPPFLAGS_QTGUI) $(CPPFLAGS_QTWIDGETS) -Ilibs -Iinclude
 $(INSTALLDIR)/radiant.$(EXE): \
 	radiant/autosave.o \
 	radiant/brushmanip.o \
@@ -921,6 +1002,11 @@ $(INSTALLDIR)/radiant.$(EXE): \
 	libprofile.$(A) \
 	libquickhull.$(A) \
 	libxmllib.$(A) \
+<<<<<<< Updated upstream
+=======
+	libos.$(A) \
+	libdock.$(A) \
+>>>>>>> Stashed changes
 	$(if $(findstring Win32,$(OS)),icons/radiant.o,) \
 
 libfilematch.$(A): CPPFLAGS_EXTRA := -Ilibs
